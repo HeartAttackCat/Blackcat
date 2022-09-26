@@ -6,13 +6,14 @@
 #define BSIZE 100
 
 typedef struct {
-    void *LChild, *RChild;
+    struct tree *LChild, *RChild, *Parent;
     char *message;
     int key;
 } tree;
 
 /* function declarations of independence */
 int compare_string(int start, int stop, char *s1, char *s2);
+struct tree *initize_node(struct tree *parent, char *message, int key);
 
 int main(void)
 {
@@ -40,4 +41,28 @@ int compare_string(int start, int stop, char *s1, char *s2)
     for (int i = start; i < stop; i++)
         cmp = s1[i] - s2[i];
     return cmp;
+}
+
+/**
+ * @breif initalizes a tree node first mallocs the space for the tree and then fills out the required
+ * variables.
+ * 
+ * @param parent the parent of the node we are creating.
+ * @param message the message we are storing.
+ * @param the priority of the element.
+ * @return the memory address of the new element
+ */
+struct tree *initize_node(struct tree *parent, char *message, int key)
+{
+    struct tree *new = malloc(sizeof(struct tree))
+    if (!tree){
+        printf("Malloc failed closing");
+        exit();
+    }
+    new->parent = parent;
+    new->message = message;
+    new->key key;
+    new->LChild = NULL;
+    new->RChild = NULL;
+    return new;
 }
