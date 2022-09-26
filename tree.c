@@ -20,11 +20,20 @@ int main(void)
     printf(WELCOME_SCREEN);
     fgets(Buffer, BSIZE, stdin);
     if (compare_string(0, 4, Buffer, "help") == 0)
-        printf("You typed help! Go fuck yourself\n");
+        printf("You typed help! Print help page\n");
     return 0;
 
 }
 
+/**
+ * @brief Compares two strings at a start and end. If it returns a value greater then 0 then they are incorrect
+ * 
+ * @param start Start index
+ * @param stop Stop index
+ * @param s1 pointer to string one
+ * @param s2 pointer to string two
+ * @return int the comparison value
+ */
 int compare_string(int start, int stop, char *s1, char *s2)
 {
     int cmp;
