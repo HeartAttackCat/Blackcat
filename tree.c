@@ -4,16 +4,18 @@
 /* All the text displayed to the user defined */
 #define WELCOME_SCREEN "-=-=-=-=-=-=-=-=-=-=-[Welcome]-=-=-=-=-=-=-=-=-=-\n    /\\  /\\     Made by Miriam and Cas.    *\n   / O  O \\       * Balance Tree +\n   \\  I   /   *                          *\n   /      \\         *             *\n  / |    | \\    +           *                *\n  | |    | |        *                 +\n   W W  W W    *              +           * \n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n Type help for help. Welcome to tree balancer. \n Console>"
 #define BSIZE 100
-
-typedef struct {
+struct  tree{
     struct tree *LChild, *RChild, *Parent;
     char *message;
-    int key;
-} tree;
+    int key, depth;
+};
 
 /* function declarations of independence */
 int compare_string(int start, int stop, char *s1, char *s2);
-struct tree *initize_node(struct tree *parent, char *message, int key);
+struct tree *initize_node(struct tree *parent, char *message, int key, int dep);
+char *message(void);
+int priorinput(void);
+
 
 int main(void)
 {
@@ -25,6 +27,7 @@ int main(void)
     return 0;
 
 }
+
 
 /**
  * @brief Compares two strings at a start and end. If it returns a value greater then 0 then they are incorrect
@@ -43,6 +46,39 @@ int compare_string(int start, int stop, char *s1, char *s2)
     return cmp;
 }
 
+
+/**
+ * @brief a function for grabbing messages.
+ * 
+ * @return the user input.
+ */
+char *message(void)
+{
+
+    char buff[100];
+    printf("What message are we storing: ");
+    fgets(buff, 100, stdin);
+    return buff;
+}
+
+
+/**
+ * @brief a quick function for getting a key value.
+ * 
+ * @return the users input key value.
+ */
+int priorinput(void)
+{
+    char buff[100];
+    int val;
+    printf("What message are we storing: ");
+    fgets(buff, 100, stdin);
+    sscanf(buff, "%d", &val);
+    return buff;  
+
+}
+
+
 /**
  * @breif initalizes a tree node first mallocs the space for the tree and then fills out the required
  * variables.
@@ -52,16 +88,16 @@ int compare_string(int start, int stop, char *s1, char *s2)
  * @param the priority of the element.
  * @return the memory address of the new element
  */
-struct tree *initize_node(struct tree *parent, char *message, int key)
+struct tree *initize_node(struct tree *parent, char *message, int key, int dep)
 {
-    struct tree *new = malloc(sizeof(struct tree))
-    if (!tree){
+    struct tree *new = malloc(sizeof(struct tree));
+    if (!new){
         printf("Malloc failed closing");
-        exit();
+        exit(0);
     }
-    new->parent = parent;
+    new->Parent = parent;
     new->message = message;
-    new->key key;
+    new->key = key;
     new->LChild = NULL;
     new->RChild = NULL;
     return new;
