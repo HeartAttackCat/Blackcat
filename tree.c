@@ -78,6 +78,32 @@ int priorinput(void)
 
 }
 
+/**
+ * @brief a recurisve function that adds a new node
+ * 
+ * @param head the starting point of the node
+ * @param key the key value of the node
+ * @param dep the depth of the created node. This MUST start at
+ * zero when called.
+ */
+void newnode(struct tree *head, int key, int dep)
+{
+    if(head != NULL){
+        if(key < head->key){
+            if(head->LChild == NULL)
+                head->LChild = initize_node(head, message(), key, dep);
+            else
+                newnode(head, key, ++dep);
+        } else{
+            if(head->RChild == NULL)
+                head->RChild = initize_node(head, message(), key, dep);
+            else
+                newnode(head, key, ++dep);
+        }
+        }
+} 
+
+
 
 /**
  * @breif initalizes a tree node first mallocs the space for the tree and then fills out the required
@@ -85,7 +111,8 @@ int priorinput(void)
  * 
  * @param parent the parent of the node we are creating.
  * @param message the message we are storing.
- * @param the priority of the element.
+ * @param key the priority of the element.
+ * @param dep the depth of the new tree. Not user defined.
  * @return the memory address of the new element
  */
 struct tree *initize_node(struct tree *parent, char *message, int key, int dep)
@@ -98,6 +125,7 @@ struct tree *initize_node(struct tree *parent, char *message, int key, int dep)
     new->Parent = parent;
     new->message = message;
     new->key = key;
+    new->depth = dep;
     new->LChild = NULL;
     new->RChild = NULL;
     return new;
