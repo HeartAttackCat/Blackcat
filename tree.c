@@ -12,7 +12,7 @@ struct  tree{
 
 /* function declarations of independence */
 int compare_string(int start, int stop, char *s1, char *s2);
-struct tree *initize_node(struct tree *parent, char *message, int key, int dep);
+struct tree *initize_node(struct tree *parent, char *message, int key);
 char *message(void);
 int priorinput(void);
 
@@ -83,26 +83,35 @@ int priorinput(void)
  * 
  * @param head the starting point of the node
  * @param key the key value of the node
- * @param dep the depth of the created node. This MUST start at
- * zero when called.
  */
-void newnode(struct tree *head, int key, int dep)
+void newnode(struct tree *head, int key)
 {
     if(head != NULL){
         if(key < head->key){
             if(head->LChild == NULL)
-                head->LChild = initize_node(head, message(), key, dep);
+                head->LChild = initize_node(head, message(), key);
             else
-                newnode(head, key, ++dep);
+                newnode(head, key);
         } else{
             if(head->RChild == NULL)
-                head->RChild = initize_node(head, message(), key, dep);
+                head->RChild = initize_node(head, message(), key);
             else
-                newnode(head, key, ++dep);
+                newnode(head, key);
         }
         }
 } 
 
+
+/**
+ * @brief prints out the tree.
+ * 
+ * @param head the start of the tree.
+ * @param st the current string we are
+ */
+void printtree(struct tree *head, char *st)
+{
+
+}
 
 
 /**
@@ -112,20 +121,23 @@ void newnode(struct tree *head, int key, int dep)
  * @param parent the parent of the node we are creating.
  * @param message the message we are storing.
  * @param key the priority of the element.
- * @param dep the depth of the new tree. Not user defined.
  * @return the memory address of the new element
  */
-struct tree *initize_node(struct tree *parent, char *message, int key, int dep)
+struct tree *initize_node(struct tree *parent, char *message, int key)
 {
+
     struct tree *new = malloc(sizeof(struct tree));
     if (!new){
         printf("Malloc failed closing");
         exit(0);
     }
+    if(parent == NULL)
+        new->depth = 0;
+    else
+        new->depth = parent->depth + 1;
     new->Parent = parent;
-    new->message = message;
     new->key = key;
-    new->depth = dep;
+    new->message = message;
     new->LChild = NULL;
     new->RChild = NULL;
     return new;
