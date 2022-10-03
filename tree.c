@@ -29,6 +29,23 @@ int main(void)
 }
 
 
+char *find(int key, struct tree *head)
+{
+    if (head != NULL){
+        if(key == head->key){
+            printf("%d with message %s located at depth %d\n", key, head->message, head->depth);
+        } else if (key < head->key){
+            find(key, head->LChild);
+        } else {
+            find(key, head->RChild);
+        }
+    } else{
+        printf("ERROR | Node does not exist\n");
+    }
+
+}
+
+
 /**
  * @brief Compares two strings at a start and end. If it returns a value greater then 0 then they are incorrect
  * 
