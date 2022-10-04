@@ -97,6 +97,54 @@ int priorinput(void)
 }
 
 /**
+ * @brief perfroms an in order traversal of a tree.
+ * 
+ * @param head the head of the tree or the curretn node we are in.
+ */ 
+void inorder(struct tree *head)
+{
+    if (head != NULL){
+        inorder(head->LChild);
+        printf("%s | Key: %d. ", head->message, head->key);
+        inorder(head->RChild);
+    }
+
+}
+
+
+/**
+ * @brief perfroms an pre order traversal of a tree.
+ * 
+ * @param head the head of the tree or the curretn node we are in.
+ */ 
+void preorder(struct tree *head)
+{
+    if (head != NULL){
+        printf("%s | Key: %d. ", head->message, head->key);
+        preorder(head->LChild);
+        preorder(head->RChild);
+    }
+
+}
+
+
+/**
+ * @brief perfroms an post order traversal of a tree.
+ * 
+ * @param head the head of the tree or the curretn node we are in.
+ */ 
+void postorder(struct tree *head)
+{
+    if (head != NULL){
+        postorder(head->LChild);
+        postorder(head->RChild);
+        printf("%s | Key: %d. ", head->message, head->key);
+    }
+
+}
+
+
+/**
  * @brief a recurisve function that adds a new node
  * 
  * @param head the starting point of the node
