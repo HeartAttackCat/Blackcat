@@ -15,7 +15,7 @@ int compare_string(int start, int stop, char *s1, char *s2);
 struct tree *initize_node(struct tree *parent, char *message, int key);
 char *message(void);
 int priorinput(void);
-
+char *find(int key, struct tree *head);
 
 int main(void)
 {
@@ -34,6 +34,7 @@ char *find(int key, struct tree *head)
     if (head != NULL){
         if(key == head->key){
             printf("%d with message %s located at depth %d\n", key, head->message, head->depth);
+            return head->message;
         } else if (key < head->key){
             find(key, head->LChild);
         } else {
