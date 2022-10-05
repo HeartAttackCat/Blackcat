@@ -67,7 +67,11 @@ int main(void)
     return 0;
 
 }
-
+/**
+ * @brief Runs the add menu
+ * 
+ * @param master a pointer to the tree
+ */
 void addMenu(struct tree *master)
 {
     char *msg = message();
@@ -75,6 +79,10 @@ void addMenu(struct tree *master)
     newnode(master, key, msg);
 }
 
+/**
+ * @brief prints help menu
+ * 
+ */
 void helpMenu(void)
 {
     printf("-=-=-=-=-=-=-[Help]-=-=-=-=-=-=-\n");
