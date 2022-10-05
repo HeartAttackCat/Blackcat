@@ -65,7 +65,7 @@ int main(void)
                 exit(0);
                 break;
             case 'd':
-                deleteMenu(master);
+                deleteMenu(masterptr);
                 break;
             default:
                 //the command didn't exist
