@@ -2,32 +2,85 @@
 #include <stdlib.h>
 
 /* All the text displayed to the user defined */
-#define WELCOME_SCREEN "-=-=-=-=-=-=-=-=-=-=-[Welcome]-=-=-=-=-=-=-=-=-=-\n    /\\  /\\     Made by Miriam and Cas.    *\n   / O  O \\       * Balance Tree +\n   \\  I   /   *                          *\n   /      \\         *             *\n  / |    | \\    +           *                *\n  | |    | |        *                 +\n   W W  W W    *              +           * \n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n Type help for help. Welcome to tree balancer. \n Console>"
+#define WELCOME_SCREEN "-=-=-=-=-=-=-=-=-=-=-[Welcome]-=-=-=-=-=-=-=-=-=-\n    /\\  /\\     Made by Miriam and Cas.    *\n   / O  O \\       * Balance Tree +\n   \\  I   /   *                          *\n   /      \\         *             *\n  / |    | \\    +           *                *\n  | |    | |        *                 +\n   W W  W W    *              +           * \n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n"
 #define BSIZE 100
+
 struct  tree{
     struct tree *LChild, *RChild, *Parent;
     char *message;
     int key, depth;
 };
 
-/* function declarations of independence */
-int compare_string(int start, int stop, char *s1, char *s2);
-struct tree *initize_node(struct tree *parent, char *message, int key);
+//BEGIN - function declarations of independence
+
+/* help menu functions */
+void helpMenu(void);
+void addMenu(struct tree *master);
+
+/* memory functions */
 char *message(void);
+
+/* tree functions */
+struct tree *initize_node(struct tree *parent, char *message, int key);
 int priorinput(void);
 struct tree *find(int key, struct tree *head);
+void newnode(struct tree *head, int key, char *message);
+void inorder(struct tree *head);
+//END
 
 int main(void)
 {
-    char Buffer[BSIZE];
+    //set up the user input variables
+    struct tree master;
+    master.key = 1;
+    master.message = "Hello world";
+    struct tree *masterptr = &master;
+    char Buffer[BSIZE], com;
     printf(WELCOME_SCREEN);
-    fgets(Buffer, BSIZE, stdin);
-    if (compare_string(0, 4, Buffer, "help") == 0)
-        printf("You typed help! Print help page\n");
+    while (1) {
+        printf("User>");
+        fgets(Buffer, BSIZE, stdin);
+        //take the user input buffer and find the command
+        sscanf(Buffer, "%c", &com);
+        //Select command 
+        switch(com)
+        {
+            case 'd':
+                //meow
+                break;
+            case 'p':
+                inorder(masterptr);
+                break;
+            case 'a':
+                addMenu(masterptr);
+                break;
+            case 'h':
+                helpMenu();
+                break;
+            case 'e':
+                exit(0);
+                break;
+            default:
+                printf("Command does not exist...\n");
+        }
+    }
     return 0;
 
 }
 
+void addMenu(struct tree *master)
+{
+    char *msg = message();
+    int key = priorinput();
+    newnode(master, key, msg);
+}
+
+void helpMenu(void)
+{
+    printf("-=-=-=-=-=-=-[Help]-=-=-=-=-=-=-\n");
+    printf("Pritning the help page.\n");
+    printf("-=-=-=-=-=-=-[END]-=-=-=-=-=-=-=-\n");
+}
 /**
  * @brief finds a given value based upon its key value. Keeps going until it
  * finds it.
@@ -50,37 +103,19 @@ struct tree *find(int key, struct tree *head)
         printf("ERROR | Node does not exist\n");
         return NULL;
     }
-
+    return NULL;
 }
-
-
-/**
- * @brief Compares two strings at a start and end. If it returns a value greater then 0 then they are incorrect
- * 
- * @param start Start index
- * @param stop Stop index
- * @param s1 pointer to string one
- * @param s2 pointer to string two
- * @return int the comparison value
- */
-int compare_string(int start, int stop, char *s1, char *s2)
-{
-    int cmp;
-    for (int i = start; i < stop; i++)
-        cmp = s1[i] - s2[i];
-    return cmp;
-}
-
 
 /**
  * @brief a function for grabbing messages.
  * 
  * @return the user input.
  */
-char *message(void)
+char *message()
 {
-
-    char buff[100];
+    char *buff = malloc(100 * sizeof(char));
+    if (buff == NULL)
+        exit(-10);
     printf("What message are we storing: ");
     fgets(buff, 100, stdin);
     return buff;
@@ -96,11 +131,10 @@ int priorinput(void)
 {
     char buff[100];
     int val;
-    printf("What message are we storing: ");
+    printf("What key are we storing: ");
     fgets(buff, 100, stdin);
     sscanf(buff, "%d", &val);
-    return buff;  
-
+    return val;  
 }
 
 /**
@@ -112,7 +146,7 @@ void inorder(struct tree *head)
 {
     if (head != NULL){
         inorder(head->LChild);
-        printf("%s | Key: %d. ", head->message, head->key);
+        printf("%s | Key: %d. \n", head->message, head->key);
         inorder(head->RChild);
     }
 
@@ -157,21 +191,21 @@ void postorder(struct tree *head)
  * @param head the starting point of the node
  * @param key the key value of the node
  */
-void newnode(struct tree *head, int key)
+void newnode(struct tree *head, int key, char *msg)
 {
     if(head != NULL){
         if(key < head->key){
             if(head->LChild == NULL)
-                head->LChild = initize_node(head, message(), key);
+                head->LChild = initize_node(head, msg, key);
             else
-                newnode(head, key);
+                newnode(head, key, msg);
         } else{
             if(head->RChild == NULL)
-                head->RChild = initize_node(head, message(), key);
+                head->RChild = initize_node(head, msg, key);
             else
-                newnode(head, key);
+                newnode(head, key, msg);
         }
-        }
+    }
 } 
 
 
