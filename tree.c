@@ -360,17 +360,17 @@ void keyvalprint(struct tree *head)
 
 /**
  * @brief Prints it in a preorder traversal method.
- * @remark seems to create problems printing sideways in a preorder
- * must be a way to print rightside up.
+ * @remark Prints sideways and common indentation tells us what we are at
+ * but appears to work.
  * 
  * @param head the head of the tree.
  */
-void printtree(struct tree *head, int m_depth)
+void printtree(struct tree *head)
 {
     if (head != NULL){
         spaceprintt(head->depth, head->message);
-        printtree(head->LChild, m_depth);
-        printtree(head->RChild, m_depth);
+        printtree(head->LChild);
+        printtree(head->RChild);
     }
 }
 
@@ -386,7 +386,7 @@ void printtree(struct tree *head, int m_depth)
  */
 void spaceprintt(int dep, char *message)
 {
-    if (dep >= 0){
+    if (dep > 0){
         printf("    ");
         spaceprintt(--dep, message);
     } else {
