@@ -210,12 +210,12 @@ void newnode(struct tree *head, int key, char *msg)
             if(head->LChild == NULL)
                 head->LChild = initize_node(head, msg, key);
             else
-                newnode(head, key, msg);
+                newnode(head->LChild, key, msg);
         } else{
             if(head->RChild == NULL)
                 head->RChild = initize_node(head, msg, key);
             else
-                newnode(head, key, msg);
+                newnode(head->RChild, key, msg);
         }
     }
 } 
