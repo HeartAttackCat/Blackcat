@@ -28,7 +28,13 @@ int main(void)
 
 }
 
-
+/**
+ * @brief finds a given value based upon its key value. Keeps going until it
+ * finds it.
+ * @param key the key value we are looking for.
+ * @param head the head of the tree we are looking.
+ * @return the string we are looking for.
+ */
 char *find(int key, struct tree *head)
 {
     if (head != NULL){
