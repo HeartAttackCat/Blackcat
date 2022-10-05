@@ -237,18 +237,6 @@ void newnode(struct tree *head, int key, char *msg)
 
 
 /**
- * @brief prints out the tree.
- * 
- * @param head the start of the tree.
- * @param st the current string we are
- */
-void printtree(struct tree *head, char *st)
-{
-
-}
-
-
-/**
  * @breif initalizes a tree node first mallocs the space for the tree and then fills out the required
  * variables.
  * 
@@ -371,14 +359,38 @@ void keyvalprint(struct tree *head)
 }
 
 /**
- * @brief this will print the tree please DO NOT FORGET to fix the name.
+ * @brief Prints it in a preorder traversal method.
+ * @remark seems to create problems printing sideways in a preorder
+ * must be a way to print rightside up.
  * 
  * @param head the head of the tree.
  */
-void printtree(struct tree *head)
+void printtree(struct tree *head, int m_depth)
 {
     if (head != NULL){
-        
+        spaceprintt(head->depth, head->message);
+        printtree(head->LChild, m_depth);
+        printtree(head->RChild, m_depth);
+    }
+}
+
+
+
+
+/**
+ * @brief Helper function for printtree because you can't multiply strings/chars
+ * in C. As per usual a recurisve loop.
+ * 
+ * @param dep the depth of the function
+ * @param message the message we are writing to the function.
+ */
+void spaceprintt(int dep, char *message)
+{
+    if (dep >= 0){
+        printf("    ");
+        spaceprintt(--dep, message);
+    } else {
+        printf("%s\n", message);
     }
 }
 
