@@ -15,6 +15,7 @@ struct  tree{
 /* help menu functions */
 void helpMenu(void);
 void addMenu(struct tree *master);
+void deleteMenu(struct tree *master);
 
 /* memory functions */
 char *message(void);
@@ -44,7 +45,7 @@ int main(void)
         //Select command 
         switch(com)
         {
-            case 'd':
+            case 'o':
                 //print the depth
                 break;
             case 'p':
@@ -63,6 +64,9 @@ int main(void)
                 //close the program
                 exit(0);
                 break;
+            case 'd':
+                deleteMenu(masterptr);
+                break;
             default:
                 //the command didn't exist
                 printf("Command does not exist...\n");
@@ -71,6 +75,17 @@ int main(void)
     return 0;
 
 }
+
+/**
+ * @brief THe menu for deleting a node
+ * 
+ * @param master the pointer to the head of the tree
+ */
+void deleteMenu(struct tree *master)
+{
+
+}
+
 /**
  * @brief Runs the add menu
  * 
