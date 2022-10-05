@@ -354,3 +354,32 @@ void keyvalprint(struct tree *head)
         inorder(head->RChild);
     }
 }
+
+/**
+ * @brief this will print the tree please DO NOT FORGET to fix the name.
+ * 
+ * @param head the head of the tree.
+ */
+void printtree(struct tree *head)
+{
+    if (head != NULL){
+        
+    }
+}
+
+
+/**
+ * @brief updates the depth of all variables
+ * 
+ * @param head the starting point of the tree
+ * @param dep the starting depth of the function. PASS 0 HERE.
+ * @return 0
+ */
+int depthupdate(struct tree *head, int dep)
+{
+    if (head == NULL)
+        return 0;
+    head->depth = dep;
+    depthupdate(head->LChild, ++dep);
+    depthupdate(head->RChild, ++dep);
+}
