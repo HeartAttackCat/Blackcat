@@ -11,8 +11,7 @@ struct  tree{
     int key, depth;
 };
 
-//BEGIN - function declarations of independence
-
+//BEGIN - function declarations of independences
 /* help menu functions */
 void helpMenu(void);
 void addMenu(struct tree *master);
@@ -46,21 +45,26 @@ int main(void)
         switch(com)
         {
             case 'd':
-                //meow
+                //print the depth
                 break;
             case 'p':
+                //print the tree in order
                 inorder(masterptr);
                 break;
             case 'a':
+                //add a new node
                 addMenu(masterptr);
                 break;
             case 'h':
+                //print the help menu
                 helpMenu();
                 break;
             case 'e':
+                //close the program
                 exit(0);
                 break;
             default:
+                //the command didn't exist
                 printf("Command does not exist...\n");
         }
     }
