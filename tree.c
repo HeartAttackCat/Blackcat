@@ -15,7 +15,7 @@ int compare_string(int start, int stop, char *s1, char *s2);
 struct tree *initize_node(struct tree *parent, char *message, int key);
 char *message(void);
 int priorinput(void);
-char *find(int key, struct tree *head);
+struct tree *find(int key, struct tree *head);
 
 int main(void)
 {
@@ -35,12 +35,12 @@ int main(void)
  * @param head the head of the tree we are looking.
  * @return the string we are looking for.
  */
-char *find(int key, struct tree *head)
+struct tree *find(int key, struct tree *head)
 {
     if (head != NULL){
         if(key == head->key){
             printf("%d with message %s located at depth %d\n", key, head->message, head->depth);
-            return head->message;
+            return head;
         } else if (key < head->key){
             find(key, head->LChild);
         } else {
@@ -48,6 +48,7 @@ char *find(int key, struct tree *head)
         }
     } else{
         printf("ERROR | Node does not exist\n");
+        return NULL;
     }
 
 }
@@ -213,4 +214,42 @@ struct tree *initize_node(struct tree *parent, char *message, int key)
     new->LChild = NULL;
     new->RChild = NULL;
     return new;
+}
+
+
+struct tree *delete(struct tree *head, int key)
+{
+    struct tree *cur = find(key, head);
+    struct tree *par = find(cur->Parent->key, head);
+    if (cur == NULL){
+        printf("Node does not exist.\n");
+        return head;
+    } else if (cur->LChild == NULL && cur->RChild == NULL){
+        free(cur);
+        return head;
+    } else if (cur->LChild == NULL){
+        struct tree *temp = cur;
+        cur = cur->RChild;
+        cur->depth = temp->depth;
+        cur->Parent = temp->Parent;
+        if (par->key < key){
+            par->LChild = cur;
+        } else{
+            par->RChild = cur;
+        }
+        free(temp);
+    } else if (cur->RChild == NULL){
+        struct tree *temp = cur;
+        cur = cur->LChild;
+        cur->depth = temp->depth;
+        cur->Parent = temp->Parent;
+        if (par->key < key){
+            par->LChild = cur;
+        } else{
+            par->RChild = cur;
+        }
+        free(temp);
+    } else {
+        
+    }
 }
