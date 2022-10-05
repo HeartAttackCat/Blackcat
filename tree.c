@@ -342,7 +342,7 @@ struct tree *delete(struct tree *head, int key)
 
 
 /**
- * @brief prints out all the key values in said function.
+ * @brief prints out all the key values in said function. 
  * 
  * @param head the head of the trees.
  */
