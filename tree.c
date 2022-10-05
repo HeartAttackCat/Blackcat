@@ -216,7 +216,39 @@ struct tree *initize_node(struct tree *parent, char *message, int key)
     return new;
 }
 
+/**
+ * @brief a function that will settle the disparity between two trees
+ * 
+ * @param cur the larger key of the two nodes of which we going to be adding 
+ * onto.
+ * @param add the smaller key of the two nodes of which we will be adding
+ * this one to the other.
+ */
+void settle(struct tree *cur, struct tree *add)
+{
+    if (cur->key < add->key){
+        if(cur->RChild != NULL){
+            settle(cur->RChild, add);
+        } else{
+            cur->RChild = add;
+        }
+    } else {
+        if (cur->LChild != NULL){
+            settle(cur->LChild, add);
+        } else {
+            cur->LChild = add;
+        }
+    }
+}
 
+
+/**
+ * @brief deletes a specified node by its key
+ * 
+ * @param head the head of the tree
+ * @param key the key we are looking to delete
+ * @return returns the new head if it was updated.
+ */
 struct tree *delete(struct tree *head, int key)
 {
     struct tree *cur = find(key, head);
@@ -250,6 +282,14 @@ struct tree *delete(struct tree *head, int key)
         }
         free(temp);
     } else {
-        
+        struct tree *rig = cur->RChild;
+        struct tree *left = cur->LChild; 
+        if(cur == par->LChild){
+            settle(left, rig);
+        } else {
+            settle(rig, left);
+        }
+        free(cur);
     }
+    return head;
 }
