@@ -292,7 +292,8 @@ void settle(struct tree *cur, struct tree *add)
 
 
 /**
- * @brief deletes a specified node by its key
+ * @brief deletes a specified node by its key.
+ * @remark finds the parent as well to add onto the new child to it.
  * 
  * @param head the head of the tree
  * @param key the key we are looking to delete
@@ -302,12 +303,14 @@ struct tree *delete(struct tree *head, int key)
 {
     struct tree *cur = find(key, head);
     struct tree *par = find(cur->Parent->key, head);
+    // Doesnt exist.
     if (cur == NULL){
-        printf("Node does not exist.\n");
         return head;
+    // No child.
     } else if (cur->LChild == NULL && cur->RChild == NULL){
         free(cur);
         return head;
+    // only one child and right.
     } else if (cur->LChild == NULL){
         struct tree *temp = cur;
         cur = cur->RChild;
@@ -319,6 +322,7 @@ struct tree *delete(struct tree *head, int key)
             par->RChild = cur;
         }
         free(temp);
+    // only one child and left.
     } else if (cur->RChild == NULL){
         struct tree *temp = cur;
         cur = cur->LChild;
@@ -330,9 +334,11 @@ struct tree *delete(struct tree *head, int key)
             par->RChild = cur;
         }
         free(temp);
+    // if two children
     } else {
         struct tree *rig = cur->RChild;
         struct tree *left = cur->LChild; 
+        // comparison decides where to add onto parent.
         if(cur == par->LChild){
             settle(left, rig);
         } else {
@@ -368,6 +374,7 @@ void keyvalprint(struct tree *head)
 void printtree(struct tree *head)
 {
     if (head != NULL){
+        // helper function that deals with the printing.
         spaceprintt(head->depth, head->message);
         printtree(head->LChild);
         printtree(head->RChild);
