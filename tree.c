@@ -536,36 +536,6 @@ struct tree *left(struct tree *zero)
 }
 
 
-/**
- * @brief does a left rotation
- * 
- * @param node the node we are rotating
- * @return the new node
- */
-/**
-struct tree *left(struct tree *node)
-{
-    //Store the parent node
-    struct tree *tmp;
-    tmp = node;
-
-    //Store the right child, which will become the new root
-    struct tree *new_root = node->LChild;
-
-    //Make the new root's parent that of the roots
-    new_root->Parent = tmp->Parent;
-
-    //Set the new roots left child to tmp
-    new_root->RChild = tmp;
-
-    //Clear the right child of the old root and the left child
-    tmp->LChild = NULL;
-
-    //Set node to the right child
-    node = new_root;
-    return new_root;
-}
-*/
 
 /**
  * @brief does a right rotation
@@ -596,30 +566,6 @@ struct tree *right(struct tree *zero)
     return one; 
 }
 
-/*
-struct tree *right(struct tree *node)
-{
-    //Store the parent node
-    struct tree *tmp = node;
-
-    //Store the right, as the new root
-    struct tree *new_root = node->RChild;
-
-    //Get the parent of old root store it in new root
-    new_root->Parent = tmp->Parent;
-
-    //Set the new roots left child to the old root
-    new_root->LChild = tmp;
-
-    //set the old roots right child to null now that it doesn't have one
-    tmp->RChild = NULL;
-    
-    node = new_root;
-    return new_root;
-}
-*/
-
-
 /**
  * @brief a function to balance out a tree
  * @remark the left and right functions seem to remove crucial memory.
@@ -633,17 +579,17 @@ struct tree *balance(struct tree *node, int key)
     int balance = difference(node);
 
     //  left right
-    if (balance < -1 && key < node->LChild->key){
+    if (balance < -1 && key < node->RChild->key){
         node->RChild = right(node->RChild);
         node = left(node);
     // right right
-    } else if (balance < -1 && key > node->RChild->key){
+    } else if (balance < -1 && key > node->LChild->key){
         node = left(node);
     // left left
-    } else if (balance > 1 && key < node->LChild->key){
+    } else if (balance > 1 && key < node->RChild->key){
         node = right(node);
     // right left
-    } else if (balance > 1 && key > node->RChild->key){
+    } else if (balance > 1 && key > node->LChild->key){
         node->LChild = left(node->LChild);
         node = right(node);
     }
