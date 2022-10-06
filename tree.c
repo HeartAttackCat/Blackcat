@@ -34,14 +34,17 @@ struct tree *delete(struct tree *head, int key);
 void printtree(struct tree *head);
 int depthupdate(struct tree *head, int dep);
 void spaceprintt(int dep, char *message);
+struct tree *left(struct tree *node);
+struct tree *right(struct tree *node);
 //END
 
 int main(void)
 {
     //set up the user input variables
     struct tree master;
-    master.key = 1;
+    master.key = 3;
     master.message = "Hello world";
+    master.Parent = NULL;
     struct tree *masterptr = &master;
     char Buffer[BSIZE], com;
     printf(WELCOME_SCREEN);
@@ -74,6 +77,12 @@ int main(void)
                 break;
             case 'd':
                 deleteMenu(masterptr);
+                break;
+            case 't':
+                masterptr = right(masterptr);
+                break;
+            case 'z':
+                //breakpoint
                 break;
             default:
                 //the command didn't exist
@@ -409,7 +418,6 @@ void spaceprintt(int dep, char *message)
     }
 }
 
-
 /**
  * @brief updates the depth of all variables
  * 
@@ -424,4 +432,48 @@ int depthupdate(struct tree *head, int dep)
     head->depth = dep;
     depthupdate(head->LChild, ++dep);
     depthupdate(head->RChild, ++dep);
+}
+
+struct tree *left(struct tree *node)
+{
+    //Store the parent node
+    struct tree *tmp;
+    tmp = node;
+
+    //Store the right child, which will become the new root
+    struct tree *new_root = node->LChild;
+
+    //Make the new root's parent that of the roots
+    new_root->Parent = tmp->Parent;
+
+    //Set the new roots left child to tmp
+    new_root->RChild = tmp;
+
+    //Clear the right child of the old root and the left child
+    tmp->LChild = NULL;
+
+    //Set node to the right child
+    node = new_root;
+    return new_root;
+}
+
+struct tree *right(struct tree *node)
+{
+    //Store the parent node
+    struct tree *tmp = node;
+
+    //Store the right, as the new root
+    struct tree *new_root = node->RChild;
+
+    //Get the parent of old root store it in new root
+    new_root->Parent = tmp->Parent;
+
+    //Set the new roots left child to the old root
+    new_root->LChild = tmp;
+
+    //set the old roots right child to null now that it doesn't have one
+    tmp->RChild = NULL;
+    
+    node = new_root;
+    return new_root;
 }
