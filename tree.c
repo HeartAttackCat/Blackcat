@@ -117,6 +117,7 @@ void deleteMenu(struct tree *master)
 {
     int key = priorinput();
     master = delete(master, key);
+    master =  balance(master, key);
 }
 
 
@@ -130,6 +131,7 @@ void addMenu(struct tree *master)
     int key = priorinput();
     char *msg = message();
     newnode(master, key, msg);
+    master =  balance(master, key);
 }
 
 /**
@@ -486,7 +488,7 @@ int depthupdate(struct tree *head, int dep)
 int height(struct tree *head, int dep)
 {
     if(head == NULL)
-        return dep - 1;
+        return 0;
     int z = height(head->LChild, ++dep);
     int h = height(head->RChild, ++dep);
     if(dep < z){
@@ -494,7 +496,7 @@ int height(struct tree *head, int dep)
     } else if (dep < h){
         dep = h;
     }
-    return dep - 1;
+    return dep;
 }
 
 
@@ -510,12 +512,37 @@ int difference(struct tree *node)
 }
 
 
+struct tree *left(struct tree *zero)
+{
+    struct tree *one = zero->RChild;
+    struct tree *two = one->LChild;
+
+    // rotation itself
+    one->LChild = zero;
+    zero->RChild = two;
+    // Update parents
+    one->Parent = zero->Parent;
+    zero->Parent = one;
+    if (two != NULL);
+        two->Parent = zero;
+
+    // updates the depth
+    depthupdate(zero, zero->depth);
+
+    return one; 
+
+    
+
+}
+
+
 /**
  * @brief does a left rotation
  * 
  * @param node the node we are rotating
  * @return the new node
  */
+/**
 struct tree *left(struct tree *node)
 {
     //Store the parent node
@@ -538,7 +565,38 @@ struct tree *left(struct tree *node)
     node = new_root;
     return new_root;
 }
+*/
 
+/**
+ * @brief does a right rotation
+ * 
+ * @param zero Named because that is the index relative to our rotation.
+ * @return the new zero node.
+ */
+struct tree *right(struct tree *zero)
+{
+    // named after distance from tree.
+    struct tree *one = zero->LChild;
+    struct tree *two = one->RChild;
+
+    // Move node one to be parent of var node.
+    one->RChild = zero;
+    // Move node two to be L child of node two.
+    zero->LChild = two;
+
+    // Update parents
+    one->Parent = zero->Parent;
+    zero->Parent = one;
+    if (two != NULL);
+        two->Parent = zero;
+
+    // updates the depth
+    depthupdate(zero, zero->depth);
+
+    return one; 
+}
+
+/*
 struct tree *right(struct tree *node)
 {
     //Store the parent node
@@ -559,11 +617,12 @@ struct tree *right(struct tree *node)
     node = new_root;
     return new_root;
 }
-
+*/
 
 
 /**
  * @brief a function to balance out a tree
+ * @remark the left and right functions seem to remove crucial memory.
  * 
  * @param node the head node
  * @param key the key we are using to compare
