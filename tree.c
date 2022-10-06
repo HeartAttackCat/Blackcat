@@ -186,11 +186,16 @@ char *message()
     return buff;
 }
 
-
+/**
+ * @brief removes the new line makes printing out things look better.
+ * 
+ * @param message the message we are removing
+ * @param dep the length of the string we are looking at.
+ */
 char *rm_newline(char *message, int dep)
 {
     if(message[dep] == '\n' || message[dep] == '\0'){
-        message[dep] == '\0';
+        message[dep] = '\0';
         return message;
     }
     return rm_newline(message, ++dep);
