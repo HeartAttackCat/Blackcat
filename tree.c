@@ -26,6 +26,14 @@ int priorinput(void);
 struct tree *find(int key, struct tree *head);
 void newnode(struct tree *head, int key, char *message);
 void inorder(struct tree *head);
+void keyvalprint(struct tree *head);
+void preorder(struct tree *head);
+void postorder(struct tree *head);
+void settle(struct tree *cur, struct tree *add);
+struct tree *delete(struct tree *head, int key);
+void printtree(struct tree *head);
+int depthupdate(struct tree *head, int dep);
+void spaceprintt(int dep, char *message);
 //END
 
 int main(void)
@@ -266,7 +274,7 @@ struct tree *initize_node(struct tree *parent, char *message, int key)
 }
 
 /**
- * @brief a function that will settle the disparity between two trees
+ * @brief a function that will aid when deleting nodes in trees
  * 
  * @param cur the larger key of the two nodes of which we going to be adding 
  * onto.
