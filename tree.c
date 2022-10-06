@@ -1,3 +1,24 @@
+/**
+ * @file linkedlist.c
+ * 
+ * @author Hunter Lane Kassidy Maberry
+ * 
+ * @date 2022/10/05
+ * 
+ * Assignment: Self balancing tree
+ * 
+ * Class: CSE 122
+ * 
+ * @brief A program that does operations with a self balancing tree
+ * 
+ * @detail A program that does operations with a self balancing tree. A lot of
+ * of the user functions are different versions that print out stuff where we 
+ * can also add and remove.
+ * 
+ * @bugs none
+ * 
+ * @todo none
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,7 +37,7 @@ struct  tree{
 /* help menu functions */
 void helpMenu(void);
 struct tree *addMenu(struct tree *master);
-void deleteMenu(struct tree *master);
+struct tree *deleteMenu(struct tree *master);
 
 /* memory functions */
 char *message(void);
@@ -26,7 +47,7 @@ char *rm_newline(char *message, int dep);
 struct tree *initize_node(struct tree *parent, char *message, int key);
 int priorinput(void);
 struct tree *find(int key, struct tree *head);
-void newnode(struct tree *head, int key, char *message);
+void insert(struct tree *head, int key, char *message);
 void inorder(struct tree *head);
 void keyvalprint(struct tree *head);
 void preorder(struct tree *head);
@@ -114,11 +135,12 @@ int main(void)
  * 
  * @param master the pointer to the head of the tree
  */
-void deleteMenu(struct tree *master)
+struct tree *deleteMenu(struct tree *master)
 {
     int key = priorinput();
     master = delete(master, key);
     master =  balance(master, key);
+    return master; 
 }
 
 
@@ -131,7 +153,7 @@ struct tree *addMenu(struct tree *master)
 {
     int key = priorinput();
     char *msg = message();
-    newnode(master, key, msg);
+    insert(master, key, msg);
     master =  balance(master, key);
     return master;
 }
@@ -279,26 +301,26 @@ void postorder(struct tree *head)
  * @param head the starting point of the node
  * @param key the key value of the node
  */
-void newnode(struct tree *head, int key, char *msg)
+void insert(struct tree *head, int key, char *msg)
 {
     if(head != NULL){
         if(key < head->key){
             if(head->LChild == NULL)
                 head->LChild = initize_node(head, msg, key);
             else
-                newnode(head->LChild, key, msg);
+                insert(head->LChild, key, msg);
         } else{
             if(head->RChild == NULL)
                 head->RChild = initize_node(head, msg, key);
             else
-                newnode(head->RChild, key, msg);
+                insert(head->RChild, key, msg);
         }
     }
 } 
 
 
 /**
- * @breif initalizes a tree node first mallocs the space for the tree and then fills out the required
+ * @brief initalizes a tree node first mallocs the space for the tree and then fills out the required
  * variables.
  * 
  * @param parent the parent of the node we are creating.
@@ -532,15 +554,14 @@ struct tree *left(struct tree *zero)
     depthupdate(zero, zero->depth);
 
     return one; 
-
-    
-
 }
 
 
 
 /**
- * @brief does a right rotation
+ * @brief does a right rotation.
+ * @remark the nodes we are working with are called zero, one, and two because
+ * it represents their original depth.
  * 
  * @param zero Named because that is the index relative to our rotation.
  * @return the new zero node.
@@ -570,7 +591,6 @@ struct tree *right(struct tree *zero)
 
 /**
  * @brief a function to balance out a tree
- * @remark the left and right functions seem to remove crucial memory.
  * 
  * @param node the head node
  * @param key the key we are using to compare
@@ -580,6 +600,7 @@ struct tree *balance(struct tree *node, int key)
 {
     int balance = difference(node);
 
+    // safe guards incase a node we are accessing values that don't exist.
     if (node->LChild == NULL)
     {
         if (balance < -1 && key > node->RChild->key) {
