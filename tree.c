@@ -578,7 +578,7 @@ struct tree *balance(struct tree *node, int key)
         node->RChild = right(node->RChild);
         node = left(node);
     // right right
-    } else if (balance < -1 && key > node->RChild){
+    } else if (balance < -1 && key > node->RChild->key){
         node = left(node);
     // left left
     } else if (balance > 1 && key < node->LChild->key){
