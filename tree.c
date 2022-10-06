@@ -15,7 +15,7 @@ struct  tree{
 //BEGIN - function declarations of independences
 /* help menu functions */
 void helpMenu(void);
-void addMenu(struct tree *master);
+struct tree *addMenu(struct tree *master);
 void deleteMenu(struct tree *master);
 
 /* memory functions */
@@ -68,7 +68,7 @@ int main(void)
                 break;
             case 'a':
                 //add a new node
-                addMenu(masterptr);
+                masterptr = addMenu(masterptr);
                 break;
             case 'k':
                 keyvalprint(masterptr);
@@ -127,12 +127,13 @@ void deleteMenu(struct tree *master)
  * 
  * @param master a pointer to the tree
  */
-void addMenu(struct tree *master)
+struct tree *addMenu(struct tree *master)
 {
     int key = priorinput();
     char *msg = message();
     newnode(master, key, msg);
     master =  balance(master, key);
+    return master;
 }
 
 /**
@@ -524,7 +525,7 @@ struct tree *left(struct tree *zero)
     // Update parents
     one->Parent = zero->Parent;
     zero->Parent = one;
-    if (two != NULL);
+    if (two != NULL)
         two->Parent = zero;
 
     // updates the depth
@@ -633,6 +634,25 @@ struct tree *balance(struct tree *node, int key)
 {
     int balance = difference(node);
 
+    if (node->LChild == NULL)
+    {
+        if (balance < -1 && key > node->RChild->key) {
+            node = left(node);
+        }
+        else if (balance > 1 && key > node->RChild->key){
+            node->LChild = left(node->LChild);
+            node = right(node);
+        }
+    } else if (node->RChild == NULL)
+    {
+        if (balance < -1 && key < node->LChild->key){
+            node->RChild = right(node->RChild);
+            node = left(node);
+        }
+        else if (balance > 1 && key < node->LChild->key){
+            node = right(node);
+        }
+    } else {
     //  left right
     if (balance < -1 && key < node->LChild->key){
         node->RChild = right(node->RChild);
@@ -648,6 +668,6 @@ struct tree *balance(struct tree *node, int key)
         node->LChild = left(node->LChild);
         node = right(node);
     }
-
+    }
     return node;
 }
