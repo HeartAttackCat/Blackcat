@@ -19,6 +19,7 @@ void deleteMenu(struct tree *master);
 
 /* memory functions */
 char *message(void);
+char *rm_newline(char *message, int dep);
 
 /* tree functions */
 struct tree *initize_node(struct tree *parent, char *message, int key);
@@ -34,15 +35,15 @@ struct tree *delete(struct tree *head, int key);
 void printtree(struct tree *head);
 int depthupdate(struct tree *head, int dep);
 void spaceprintt(int dep, char *message);
+int height(struct tree *head, int dep);
 //END
 
 int main(void)
 {
     //set up the user input variables
     struct tree master;
-    master.key = 1;
-    master.message = "Hello world";
     struct tree *masterptr = &master;
+    masterptr = initize_node(NULL, message(), priorinput());
     char Buffer[BSIZE], com;
     printf(WELCOME_SCREEN);
     while (1) {
@@ -54,7 +55,7 @@ int main(void)
         switch(com)
         {
             case 'o':
-                //print the depth
+                printf("%d\n", height(masterptr, 0));
                 break;
             case 'p':
                 //print the tree in order
@@ -63,6 +64,9 @@ int main(void)
             case 'a':
                 //add a new node
                 addMenu(masterptr);
+                break;
+            case 'k':
+                keyvalprint(masterptr);
                 break;
             case 'h':
                 //print the help menu
@@ -74,6 +78,15 @@ int main(void)
                 break;
             case 'd':
                 deleteMenu(masterptr);
+                break;
+            case 'i':
+                postorder(masterptr);
+                break;
+            case 'm':
+                preorder(masterptr);
+                break;
+            case 'c':
+                printtree(masterptr);
                 break;
             default:
                 //the command didn't exist
@@ -91,7 +104,8 @@ int main(void)
  */
 void deleteMenu(struct tree *master)
 {
-
+    int key = priorinput();
+    master = delete(master, key);
 }
 
 /**
@@ -101,8 +115,8 @@ void deleteMenu(struct tree *master)
  */
 void addMenu(struct tree *master)
 {
-    char *msg = message();
     int key = priorinput();
+    char *msg = message();
     newnode(master, key, msg);
 }
 
@@ -114,6 +128,14 @@ void helpMenu(void)
 {
     printf("-=-=-=-=-=-=-[Help]-=-=-=-=-=-=-\n");
     printf("Pritning the help page.\n");
+    printf("k prints they key values\n");
+    printf("a adds a node to the tree\n");
+    printf("d removes a node from the tree\n");
+    printf("c prints the tree\n");
+    printf("m preorder transersal\n");
+    printf("i post order transversal\n");
+    printf("e exits the program\n");
+    printf("p prints in a post order transveral\n");
     printf("-=-=-=-=-=-=-[END]-=-=-=-=-=-=-=-\n");
 }
 /**
@@ -127,12 +149,11 @@ struct tree *find(int key, struct tree *head)
 {
     if (head != NULL){
         if(key == head->key){
-            printf("%d with message %s located at depth %d\n", key, head->message, head->depth);
             return head;
         } else if (key < head->key){
-            find(key, head->LChild);
+            return find(key, head->LChild);
         } else {
-            find(key, head->RChild);
+            return find(key, head->RChild);
         }
     } else{
         printf("ERROR | Node does not exist\n");
@@ -151,9 +172,20 @@ char *message()
     char *buff = malloc(100 * sizeof(char));
     if (buff == NULL)
         exit(-10);
-    printf("What message are we storing: ");
+    printf("Insert message: ");
     fgets(buff, 100, stdin);
+    buff = rm_newline(buff, 0);
     return buff;
+}
+
+
+char *rm_newline(char *message, int dep)
+{
+    if(message[dep] == '\n' || message[dep] == '\0'){
+        message[dep] == '\0';
+        return message;
+    }
+    return rm_newline(message, ++dep);
 }
 
 
@@ -166,7 +198,7 @@ int priorinput(void)
 {
     char buff[100];
     int val;
-    printf("What key are we storing: ");
+    printf("Insert Key: ");
     fgets(buff, 100, stdin);
     sscanf(buff, "%d", &val);
     return val;  
@@ -196,7 +228,7 @@ void inorder(struct tree *head)
 void preorder(struct tree *head)
 {
     if (head != NULL){
-        printf("%s | Key: %d. ", head->message, head->key);
+        printf("%s | Key: %d. \n", head->message, head->key);
         preorder(head->LChild);
         preorder(head->RChild);
     }
@@ -214,7 +246,7 @@ void postorder(struct tree *head)
     if (head != NULL){
         postorder(head->LChild);
         postorder(head->RChild);
-        printf("%s | Key: %d. ", head->message, head->key);
+        printf("%s | Key: %d. \n", head->message, head->key);
     }
 
 }
@@ -310,8 +342,7 @@ void settle(struct tree *cur, struct tree *add)
 struct tree *delete(struct tree *head, int key)
 {
     struct tree *cur = find(key, head);
-    struct tree *par = find(cur->Parent->key, head);
-    // Doesnt exist.
+    struct tree *par = cur->Parent;
     if (cur == NULL){
         return head;
     // No child.
@@ -336,7 +367,7 @@ struct tree *delete(struct tree *head, int key)
         cur = cur->LChild;
         cur->depth = temp->depth;
         cur->Parent = temp->Parent;
-        if (par->key < key){
+        if (par->key > key){
             par->LChild = cur;
         } else{
             par->RChild = cur;
@@ -356,7 +387,6 @@ struct tree *delete(struct tree *head, int key)
     }
     return head;
 }
-
 
 /**
  * @brief prints out all the key values in said function. 
@@ -425,3 +455,19 @@ int depthupdate(struct tree *head, int dep)
     depthupdate(head->LChild, ++dep);
     depthupdate(head->RChild, ++dep);
 }
+
+int height(struct tree *head, int dep)
+{
+    if(head == NULL)
+        return dep - 1;
+    int z = height(head->LChild, ++dep);
+    int h = height(head->RChild, ++dep);
+    if(dep < z){
+        dep = z;
+    } else if (dep < h){
+        dep = h;
+    }
+    return dep - 1;
+}
+
+
