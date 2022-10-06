@@ -34,10 +34,11 @@ void settle(struct tree *cur, struct tree *add);
 struct tree *delete(struct tree *head, int key);
 void printtree(struct tree *head);
 int depthupdate(struct tree *head, int dep);
-void spaceprintt(int dep, char *message);
+void spaceprintt(int dep, char *message, int key);
 struct tree *left(struct tree *node);
 struct tree *right(struct tree *node);
 int height(struct tree *head, int dep);
+struct tree *balance(struct tree *node);
 //END
 
 int main(void)
@@ -105,6 +106,7 @@ int main(void)
 
 }
 
+
 /**
  * @brief THe menu for deleting a node
  * 
@@ -114,7 +116,9 @@ void deleteMenu(struct tree *master)
 {
     int key = priorinput();
     master = delete(master, key);
+    balance(master);
 }
+
 
 /**
  * @brief Runs the add menu
@@ -126,6 +130,7 @@ void addMenu(struct tree *master)
     int key = priorinput();
     char *msg = message();
     newnode(master, key, msg);
+    balance(master);
 }
 
 /**
@@ -426,7 +431,7 @@ void printtree(struct tree *head)
 {
     if (head != NULL){
         // helper function that deals with the printing.
-        spaceprintt(head->depth, head->message);
+        spaceprintt(head->depth, head->message, head->key);
         printtree(head->LChild);
         printtree(head->RChild);
     }
@@ -442,13 +447,13 @@ void printtree(struct tree *head)
  * @param dep the depth of the function
  * @param message the message we are writing to the function.
  */
-void spaceprintt(int dep, char *message)
+void spaceprintt(int dep, char *message, int key)
 {
     if (dep > 0){
         printf("    ");
-        spaceprintt(--dep, message);
+        spaceprintt(--dep, message, key);
     } else {
-        printf("%s\n", message);
+        printf("%s |Key: %d\n", message, key);
     }
 }
 
@@ -468,6 +473,16 @@ int depthupdate(struct tree *head, int dep)
     depthupdate(head->RChild, ++dep);
 }
 
+
+/**
+ * @brief determines the height of two nodes.
+ * @remarks The original calculations seem to add 2 so we subtract two on each
+ * return
+ * 
+ * @param head the head of the tree
+ * @param dep the current height we are at
+ * @return the height of the given tree.
+ */
 int height(struct tree *head, int dep)
 {
     if(head == NULL)
@@ -480,6 +495,29 @@ int height(struct tree *head, int dep)
         dep = h;
     }
     return dep - 1;
+}
+
+
+/**
+ * @brief determines the dispairty and balances the two nodes.
+ * 
+ * @param node the node we are shifting.
+ * @return the updated struct location.
+ */
+struct tree *balance(struct tree *node)
+{
+    // These will get the heights of each L and R of the parent.
+    int l = height(node->LChild, 1);
+    int r = height(node->RChild, 1);
+    // Using that we find the displacement and adjust for such.
+    int total = l - r;
+    if (total < -1){
+        right(node);
+    } else if (total > 1){
+        left(node);
+    }
+    return dispar(node);
+
 }
 
 
