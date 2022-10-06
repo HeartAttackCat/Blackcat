@@ -5,4 +5,5 @@ This program is a simple user interface which let's the user add data to a tree 
 
 The program up until we implemented the remove node was easy. Once we got into the delete
 node the amount of logic for different senarios expanded requiring a lot of different paths
-for different senarios.
+for different senarios. Deletions are overall kind of difficult as I tend to run into segementation
+faults due to logic falling apart.

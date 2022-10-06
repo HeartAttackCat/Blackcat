@@ -39,6 +39,7 @@ struct tree *left(struct tree *node);
 struct tree *right(struct tree *node);
 int height(struct tree *head, int dep);
 int difference(struct tree *node);
+struct tree *balance(struct tree *node, int key);
 //END
 
 int main(void)
@@ -560,3 +561,33 @@ struct tree *right(struct tree *node)
 }
 
 
+
+/**
+ * @brief a function to balance out a tree
+ * 
+ * @param node the head node
+ * @param key the key we are using to compare
+ * @return the updated node.
+ */
+struct tree *balance(struct tree *node, int key)
+{
+    int balance = difference(node);
+
+    //  left right
+    if (balance < -1 && key < node->LChild->key){
+        node->RChild = right(node->RChild);
+        node = left(node);
+    // right right
+    } else if (balance < -1 && key > node->RChild){
+        node = left(node);
+    // left left
+    } else if (balance > 1 && key < node->LChild->key){
+        node = right(node);
+    // right left
+    } else if (balance > 1 && key > node->RChild->key){
+        node->LChild = left(node->LChild);
+        node = right(node);
+    }
+
+    return node;
+}
