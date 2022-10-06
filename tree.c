@@ -38,7 +38,7 @@ void spaceprintt(int dep, char *message, int key);
 struct tree *left(struct tree *node);
 struct tree *right(struct tree *node);
 int height(struct tree *head, int dep);
-int balance(struct tree *node);
+int difference(struct tree *node);
 //END
 
 int main(void)
@@ -503,7 +503,7 @@ int height(struct tree *head, int dep)
  * @param node the head node.
  * @return the balance between the two.
  */
-int balance(struct tree *node)
+int difference(struct tree *node)
 {
     return height(node->LChild, 1) - height(node->RChild, 1);
 }
@@ -558,3 +558,5 @@ struct tree *right(struct tree *node)
     node = new_root;
     return new_root;
 }
+
+
