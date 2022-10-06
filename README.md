@@ -11,14 +11,14 @@ faults due to logic falling apart.
 
 ### Commands
 
-Commands for the program
-
-a - let's you add a node with a helpful interface
-d - let's you delete a node using the nodes key
-o - prints the height of the tree
-k - prints the tree's keys in a preorder method
-h - prints the help menu
-i - prints post-order
-m - prints pre-order
-p - prints the tree in a visually understandable manner
-e - exits the program
+Commands for the program\
+\
+a - let's you add a node with a helpful interface\
+d - let's you delete a node using the nodes key\
+o - prints the height of the tree\
+k - prints the tree's keys in a preorder method\
+h - prints the help menu\
+i - prints post-order\
+m - prints pre-order\
+p - prints the tree in a visually understandable manner\
+e - exits the program\
