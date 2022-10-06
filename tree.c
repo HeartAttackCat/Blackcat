@@ -38,7 +38,7 @@ void spaceprintt(int dep, char *message, int key);
 struct tree *left(struct tree *node);
 struct tree *right(struct tree *node);
 int height(struct tree *head, int dep);
-struct tree *balance(struct tree *node);
+int balance(struct tree *node);
 //END
 
 int main(void)
@@ -116,7 +116,6 @@ void deleteMenu(struct tree *master)
 {
     int key = priorinput();
     master = delete(master, key);
-    balance(master);
 }
 
 
@@ -130,7 +129,6 @@ void addMenu(struct tree *master)
     int key = priorinput();
     char *msg = message();
     newnode(master, key, msg);
-    balance(master);
 }
 
 /**
@@ -323,6 +321,7 @@ struct tree *initize_node(struct tree *parent, char *message, int key)
     return new;
 }
 
+
 /**
  * @brief a function that will aid when deleting nodes in trees
  * 
@@ -501,27 +500,21 @@ int height(struct tree *head, int dep)
 /**
  * @brief determines the dispairty and balances the two nodes.
  * 
- * @param node the node we are shifting.
- * @return the updated struct location.
+ * @param node the head node.
+ * @return the balance between the two.
  */
-struct tree *balance(struct tree *node)
+int balance(struct tree *node)
 {
-    // These will get the heights of each L and R of the parent.
-    int l = height(node->LChild, 1);
-    int r = height(node->RChild, 1);
-    // Using that we find the displacement and adjust for such.
-    int total = l - r;
-    if (total < -1){
-        right(node);
-    } else if (total > 1){
-        left(node);
-    }
-    return dispar(node);
-
+    return height(node->LChild, 1) - height(node->RChild, 1);
 }
 
 
-
+/**
+ * @brief does a left rotation
+ * 
+ * @param node the node we are rotating
+ * @return the new node
+ */
 struct tree *left(struct tree *node)
 {
     //Store the parent node
