@@ -67,11 +67,11 @@ struct tree *balance(struct tree *node, int key);
 int main(void)
 {
     //set up the user input variables
-    struct tree master;
-    struct tree *masterptr = &master;
-    masterptr = initize_node(NULL, message(), priorinput());
+    struct tree *masterptr;
     char Buffer[BSIZE], com;
     printf(WELCOME_SCREEN);
+    printf("In order for the program to contiue please follow dicrections and add new node.\n");
+    masterptr = initize_node(NULL, message(), priorinput());
     while (1) {
         printf("User>");
         fgets(Buffer, BSIZE, stdin);
@@ -83,7 +83,7 @@ int main(void)
             case 'o':
                 printf("%d\n", height(masterptr, 0));
                 break;
-            case 'p':
+            case 'c':
                 //print the tree in order
                 inorder(masterptr);
                 break;
@@ -103,22 +103,20 @@ int main(void)
                 exit(0);
                 break;
             case 'd':
+                //Deletes an element
                 deleteMenu(masterptr);
                 break;
             case 'i':
+                //print postorder tree
                 postorder(masterptr);
                 break;
             case 'm':
+                //print preorder tree
                 preorder(masterptr);
                 break;
-            case 'c':
+            case 'p':
+                //Prints the tree in a visually understandable manner.
                 printtree(masterptr);
-                break;
-            case 't':
-                masterptr = right(masterptr);
-                break;
-            case 'z':
-                //breakpoint
                 break;
             default:
                 //the command didn't exist
@@ -169,11 +167,11 @@ void helpMenu(void)
     printf("k prints they key values\n");
     printf("a adds a node to the tree\n");
     printf("d removes a node from the tree\n");
-    printf("c prints the tree\n");
+    printf("p prints the tree in a visually understandable manner\n");
     printf("m preorder transersal\n");
     printf("i post order transversal\n");
     printf("e exits the program\n");
-    printf("p prints in a post order transveral\n");
+    printf("c prints in a post order transveral\n");
     printf("-=-=-=-=-=-=-[END]-=-=-=-=-=-=-=-\n");
 }
 /**
@@ -210,7 +208,7 @@ char *message()
     char *buff = malloc(100 * sizeof(char));
     if (buff == NULL)
         exit(-10);
-    printf("Insert message: ");
+    printf("Insert message(string): ");
     fgets(buff, 100, stdin);
     buff = rm_newline(buff, 0);
     return buff;
@@ -241,7 +239,7 @@ int priorinput(void)
 {
     char buff[100];
     int val;
-    printf("Insert Key: ");
+    printf("Insert Key(int): ");
     fgets(buff, 100, stdin);
     sscanf(buff, "%d", &val);
     return val;  
@@ -463,9 +461,6 @@ void printtree(struct tree *head)
     }
 }
 
-
-
-
 /**
  * @brief Helper function for printtree because you can't multiply strings/chars
  * in C. As per usual a recurisve loop.
@@ -535,7 +530,12 @@ int difference(struct tree *node)
     return height(node->LChild, 1) - height(node->RChild, 1);
 }
 
-
+/**
+ * @brief Comits a left rotation and returns the new address for the root.
+ * 
+ * @param zero Root node that first comes in
+ * @return struct tree* 
+ */
 struct tree *left(struct tree *zero)
 {
     struct tree *one = zero->RChild;
